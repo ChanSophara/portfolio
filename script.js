@@ -144,6 +144,51 @@ document.addEventListener('DOMContentLoaded', function() {
         offset: 150
     });
     
+    // Dark Mode Toggle
+    const toggle = document.getElementById('toggle');
+    const body = document.body;
+    
+    // Check for saved user preference, if any
+    const currentTheme = localStorage.getItem('theme');
+    if (currentTheme) {
+        body.classList.add(currentTheme);
+        if (currentTheme === 'dark-mode') {
+            toggle.checked = true;
+        }
+    }
+    
+    toggle.addEventListener('change', function() {
+        if (this.checked) {
+            body.classList.add('dark-mode');
+            localStorage.setItem('theme', 'dark-mode');
+        } else {
+            body.classList.remove('dark-mode');
+            localStorage.setItem('theme', 'light-mode');
+        }
+    });
+    
+    // Project Filtering
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const projectCards = document.querySelectorAll('.project-card');
+    
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Remove active class from all buttons
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            // Add active class to clicked button
+            button.classList.add('active');
+            
+            const filterValue = button.getAttribute('data-filter');
+            
+            projectCards.forEach(card => {
+                if (filterValue === 'all' || card.getAttribute('data-category') === filterValue) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
     
     // Hero image animation on mobile
     function checkHeroPhoto() {
@@ -155,6 +200,4 @@ document.addEventListener('DOMContentLoaded', function() {
     
     checkHeroPhoto();
     window.addEventListener('resize', checkHeroPhoto);
-
-    
 });
